@@ -1,20 +1,24 @@
 import express from "express";
+import db from "./config/dbConnect.js";
+import books from "./models/Book.js";
+
+db.on("error", console.error.bind(console, "connection error:"));
+db.once("open", () => {
+  console.log("Database connected");
+});
 
 const app = express();
 
 app.use(express.json());
-
-const books = [
-  { id: 1, title: "DDD" },
-  { id: 2, title: "Desing Patterns" },
-]
 
 app.get("/", (req, res) => {
   res.status(200).send("NodeJS API");
 });
 
 app.get("/books", (req, res) => {
-  res.status(200).json(books);
+  books.find((err, books) => {
+    res.status(200).json(books);
+  })
 });
 
 app.get("/books/:id", (req, res) => {
@@ -44,7 +48,7 @@ app.delete("/books/:id", (req, res) => {
 });
 
 const findBookById = (id) => {
-  return books.findIndex((livro) => livro.id == id);
+  return books.findIndex((book) => book.id == id);
 };
 
 export default app;
