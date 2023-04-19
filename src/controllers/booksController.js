@@ -2,15 +2,14 @@ import books from "../models/Book.js";
 
 class BooksController {
   static getAllBooks(req, res) {
-    books.find((err, books) => {
+    books.find().populate("author").exec((err, books) => {
       res.status(200).json(books);
     });
   }
 
   static getBookById(req, res) {
     const { id } = req.params;
-
-    books.findById(id, (error, book) => {
+    books.findById(id).populate('author', 'name').exec((error, book) => {
       if(!error) {
         return res.status(200).json(book);
       }
