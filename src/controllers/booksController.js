@@ -53,6 +53,18 @@ class BooksController {
       return res.status(500).send(error.message);
     });
   }
+
+  static getBooksBySubject(req, res) {
+    const { subject } = req.query;
+
+    books.find({ subjects: subject }, (error, books) => {
+      if(!error) {
+        return res.status(200).json(books);
+      }
+
+      return res.status(500).send(error.message);
+    });
+  }
 }
 
 export default BooksController;
